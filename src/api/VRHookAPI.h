@@ -1,5 +1,7 @@
 #pragma once
 
+#include <windows.h>
+#include "common/IDebugLog.h"
 #include "openvr.h"
 
 // VR input callbacks
@@ -18,3 +20,29 @@ public:
 	virtual void UnregisterControllerStateCB(GetControllerState_CB cbfunc) = 0;
 	virtual void UnregisterGetPosesCB(WaitGetPoses_CB cbfunc) = 0;
 };
+
+
+// Request OpenVRHookManagerAPI object from dll if it is available, otherwise return null.  Use to initialize raw OpenVR hooking
+inline OpenVRHookManagerAPI* RequestOpenVRHookManagerObject()
+{
+	typedef OpenVRHookManagerAPI* (*GetVRHookMgrFuncPtr_t)();
+	HMODULE skyrimVRToolsModule = LoadLibraryA("skyrimvrtools.dll");
+	if (skyrimVRToolsModule != nullptr)
+	{
+		GetVRHookMgrFuncPtr_t vrHookGetFunc = (GetVRHookMgrFuncPtr_t)GetProcAddress(skyrimVRToolsModule, "GetVRHookManager");
+		if (vrHookGetFunc)
+		{
+			return vrHookGetFunc();
+		}
+		else
+		{
+			_MESSAGE("Failed to get address of function GetVRHookmanager from skyrimvrtools.dll in RequestOpenVRHookManagerObject().  Is your skyrimvrtools.dll out of date?");
+		}
+	}
+	else
+	{
+		_MESSAGE("Failed to load skyrimvrtools.dll in RequestOpenVRHookManagerObject()");
+	}
+	
+	return nullptr;
+}
