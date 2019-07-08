@@ -19,6 +19,9 @@ public:
 	virtual void RegisterGetPosesCB(WaitGetPoses_CB cbfunc) = 0;
 	virtual void UnregisterControllerStateCB(GetControllerState_CB cbfunc) = 0;
 	virtual void UnregisterGetPosesCB(WaitGetPoses_CB cbfunc) = 0;
+
+	virtual vr::IVRSystem* GetVRSystem() const = 0;
+	virtual vr::IVRCompositor* GetVRCompositor() const = 0;
 };
 
 
