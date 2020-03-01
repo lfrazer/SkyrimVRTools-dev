@@ -19,6 +19,7 @@ static SKSEMessagingInterface		* g_messagingInterface = NULL;
 //API
 static PapyrusVRAPI apiMessage;
 
+const unsigned int kPluginVersionNum = 22;
 
 // Func prototype
 void OnSKSEMessageReceived(SKSEMessagingInterface::Message* message);
@@ -44,31 +45,20 @@ OpenVRHookManagerAPI* GetVRHookManagerAPI()
 extern "C" 
 {
 	
-	bool SKSEPlugin_Query(const SKSEInterface * skse, PluginInfo * info) {	// Called by SKSE to learn about this plugin and check that it's safe to load it
+	bool SKSEPlugin_Query(const SKSEInterface * skse, PluginInfo * info) 	// Called by SKSE to learn about this plugin and check that it's safe to load it
+	{
+		//Test for enabling /GS security checks
+		__security_init_cookie();
+
 		gLog.OpenRelative(CSIDL_MYDOCUMENTS, "\\My Games\\Skyrim VR\\SKSE\\SkyrimVRTools.log");
 		gLog.SetPrintLevel(IDebugLog::kLevel_Error);
 		gLog.SetLogLevel(IDebugLog::kLevel_DebugMessage);
 
-		//Test for enabling /GS security checks
-		__security_init_cookie();
-
-		_MESSAGE("SkyrimVRTools");
-
 		// populate info structure
 		info->infoVersion = PluginInfo::kInfoVersion;
 		info->name = "SkyrimVRTools";
-		info->version = 3;
+		info->version = kPluginVersionNum;
 
-		// store plugin handle so we can identify ourselves later
-		g_pluginHandle = skse->GetPluginHandle();
-
-		//Registers for messages
-		g_messagingInterface = (SKSEMessagingInterface *)skse->QueryInterface(kInterface_Messaging);
-		if (g_messagingInterface && g_pluginHandle)
-		{
-			_MESSAGE("Registering for plugin loaded message!");
-			g_messagingInterface->RegisterListener(g_pluginHandle, "SKSE", OnSKSEMessageReceived);
-		}
 
 		if (skse->isEditor)
 		{
@@ -83,6 +73,8 @@ extern "C"
 			return false;
 		}
 
+		_MESSAGE("SkyrimVRTools v%d query passed", info->version);
+
 		// ### do not do anything else in this callback
 		// ### only fill out PluginInfo and return true/false
 
@@ -91,7 +83,22 @@ extern "C"
 	}
 
 	//TODO: Create proper namespaces for everything
-	bool SKSEPlugin_Load(const SKSEInterface * skse) {	// Called by SKSE to load this plugin
+	bool SKSEPlugin_Load(const SKSEInterface * skse) 
+	{	
+		// Moving init to Load func
+		
+		// store plugin handle so we can identify ourselves later
+		g_pluginHandle = skse->GetPluginHandle();
+
+		//Registers for messages
+		g_messagingInterface = (SKSEMessagingInterface*)skse->QueryInterface(kInterface_Messaging);
+		if (g_messagingInterface && g_pluginHandle)
+		{
+			_MESSAGE("Registering for plugin loaded message!");
+			g_messagingInterface->RegisterListener(g_pluginHandle, "SKSE", OnSKSEMessageReceived);
+		}
+
+		// Called by SKSE to load this plugin
 		_MESSAGE("SkyrimVRTools loaded");
 
 		g_papyrus = (SKSEPapyrusInterface *)skse->QueryInterface(kInterface_Papyrus);
@@ -133,7 +140,10 @@ extern "C"
 		return OpenVRHookMgr::GetInstance();
 	}
 
-
+	unsigned int GetPluginVersion()
+	{
+		return kPluginVersionNum;
+	}
 
 };
 
