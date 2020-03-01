@@ -91,6 +91,20 @@ bool HookVRSystem::GetControllerState(vr::TrackedDeviceIndex_t unControllerDevic
 			finalState.ulButtonPressed &= modifiedControllerState.ulButtonPressed;
 			finalState.ulButtonTouched &= modifiedControllerState.ulButtonTouched;
 
+			// copy over modified axes from joystick (only allow reduction of values though)
+			for (int i = 0; i < k_unControllerStateAxisCount; ++i)
+			{
+				// only block inputs, so take values only if lower than existing
+				if (fabs(modifiedControllerState.rAxis[i].x) < fabs(finalState.rAxis[i].x))
+				{
+					finalState.rAxis[i].x = modifiedControllerState.rAxis[i].x;
+				}
+
+				if (fabs(modifiedControllerState.rAxis[i].y) < fabs(finalState.rAxis[i].y))
+				{
+					finalState.rAxis[i].y = modifiedControllerState.rAxis[i].y;
+				}
+			}
 		}
 	}
 
