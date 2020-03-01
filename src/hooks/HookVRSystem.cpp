@@ -72,13 +72,16 @@ bool HookVRSystem::GetControllerState(vr::TrackedDeviceIndex_t unControllerDevic
 	vr::VRControllerState_t finalState;
 
 	// Grab the state of the controller
-	bool result = vr_system->GetControllerState(unControllerDeviceIndex, &curState, sizeof(vr::VRControllerState_t));
+	const bool result = vr_system->GetControllerState(unControllerDeviceIndex, &curState, sizeof(vr::VRControllerState_t));
 	finalState = curState;
+
+	// check if device is tracking
+	const bool isTracking = vr_system->IsTrackedDeviceConnected(unControllerDeviceIndex);
 
 	// Dispatch the controller state to scaleform there are handlers registered
 	ScaleformVR::DispatchControllerState(hand, curState);
 
-	if(result)
+	if(result && isTracking)
 	{
 		// call all the registered callbacks
 		for (auto it = OpenVRHookMgr::GetInstance()->mGetControllerStateCallbacks.begin(); it != OpenVRHookMgr::GetInstance()->mGetControllerStateCallbacks.end(); ++it)
@@ -109,7 +112,8 @@ bool HookVRSystem::GetControllerState(vr::TrackedDeviceIndex_t unControllerDevic
 	}
 
 	// Give the game access to the controller depending on the shutoff flag
-	if (m_getControllerStateShutoff == false) {
+	if (m_getControllerStateShutoff == false && isTracking && result) 
+	{
 		memcpy(pControllerState, &finalState, sizeof(vr::VRControllerState_t));
 	}
 

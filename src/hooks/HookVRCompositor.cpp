@@ -36,15 +36,18 @@ EVRCompositorError HookVRCompositor::WaitGetPoses(VR_ARRAY_COUNT(unRenderPoseArr
 {
 	EVRCompositorError result = vr_compositor->WaitGetPoses(pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
 
-
-	//Calls the VRManager for Internal Processing
-	VRManager::GetInstance().UpdatePoses();
-
-	// call all the registered callbacks for raw OpenVR events
-	for (auto it = OpenVRHookMgr::GetInstance()->mWaitGetPosesCallbacks.begin(); it != OpenVRHookMgr::GetInstance()->mWaitGetPosesCallbacks.end(); ++it)
+	// error check before processing callbacks
+	if (result == EVRCompositorError::VRCompositorError_None)
 	{
-		WaitGetPoses_CB cbfunc = *it;
-		cbfunc(pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
+		//Calls the VRManager for Internal Processing
+		VRManager::GetInstance().UpdatePoses();
+
+		// call all the registered callbacks for raw OpenVR events
+		for (auto it = OpenVRHookMgr::GetInstance()->mWaitGetPosesCallbacks.begin(); it != OpenVRHookMgr::GetInstance()->mWaitGetPosesCallbacks.end(); ++it)
+		{
+			WaitGetPoses_CB cbfunc = *it;
+			cbfunc(pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
+		}
 	}
 
 	return result;
