@@ -54,7 +54,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-StaticLib|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -109,7 +109,7 @@
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)src;$(SolutionDir)src\openvr;$(SolutionDir)src\sksevr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;RUNTIME_VERSION=0x010400F1;RUNTIME;IS_VR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ForcedIncludeFiles>common/IPrefix.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
@@ -143,7 +143,7 @@
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)src;$(SolutionDir)src\openvr;$(SolutionDir)src\sksevr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;RUNTIME;RUNTIME_VERSION=0x010400F1;IS_VR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ForcedIncludeFiles>common/IPrefix.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
