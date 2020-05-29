@@ -104,19 +104,19 @@ namespace PapyrusVR
 		#pragma region SteamVR Coordinates
 			void GetSteamVRDeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSteamVRDeviceRotation");
+				//_MESSAGE("GetSteamVRDeviceRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Rotation);
 			}
 
 			void GetSteamVRDeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSteamVRDeviceQRotation");
+				//_MESSAGE("GetSteamVRDeviceQRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::QRotation);
 			}
 
 			void GetSteamVRDevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSteamVRDevicePosition");
+				//_MESSAGE("GetSteamVRDevicePosition");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Position);
 
 			}
@@ -125,19 +125,19 @@ namespace PapyrusVR
 		#pragma region Skyrim Coordinates
 			void GetSkyrimDeviceRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSkyrimDeviceRotation");
+				//_MESSAGE("GetSkyrimDeviceRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Rotation, true);
 			}
 
 			void GetSkyrimDeviceQRotation(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSkyrimDeviceQRotation");
+				//_MESSAGE("GetSkyrimDeviceQRotation");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::QRotation, true);
 			}
 
 			void GetSkyrimDevicePosition(StaticFunctionTag *base, SInt32 deviceEnum, VMArray<float> returnValues)
 			{
-				_MESSAGE("GetSkyrimDevicePosition");
+				//_MESSAGE("GetSkyrimDevicePosition");
 				CopyPoseToVMArray(deviceEnum, &returnValues, PoseParam::Position, true);
 			}
 		#pragma endregion
@@ -295,7 +295,7 @@ namespace PapyrusVR
 
 	void OnVRButtonEventReceived(VREventType eventType, EVRButtonId buttonId, VRDevice deviceId)
 	{
-		_MESSAGE("Dispatching eventType %d for button with ID: %d from device %d", eventType, buttonId, deviceId);
+		//_MESSAGE("Dispatching eventType %d for button with ID: %d from device %d", eventType, buttonId, deviceId);
 		//Notify Papyrus scripts
 		if (g_vrButtonEventRegs.m_data.size() > 0)
 			g_vrButtonEventRegs.ForEach(
@@ -305,7 +305,7 @@ namespace PapyrusVR
 
 	void OnVROverlapEventReceived(VROverlapEvent eventType, UInt32 objectHandle, VRDevice deviceId)
 	{
-		_MESSAGE("Dispatching overlap %d for device with ID: %d from handle %d", eventType, deviceId, objectHandle);
+		//_MESSAGE("Dispatching overlap %d for device with ID: %d from handle %d", eventType, deviceId, objectHandle);
 		//Notify Papyrus scripts
 		if (g_vrOverlapEventRegs.m_data.size() > 0)
 			g_vrOverlapEventRegs.ForEach(
@@ -315,7 +315,7 @@ namespace PapyrusVR
 
 	void OnVRHapticEventReceived(UInt32 axisID, UInt32 pulseDuration, VRDevice device)
 	{
-		_MESSAGE("Dispatching haptic event for device with ID: %d with axisID %d and duration %d", device, axisID, pulseDuration);
+		//_MESSAGE("Dispatching haptic event for device with ID: %d with axisID %d and duration %d", device, axisID, pulseDuration);
 		//Notify Papyrus scripts
 		if (g_vrHapticEventRegs.m_data.size() > 0)
 			g_vrHapticEventRegs.ForEach(

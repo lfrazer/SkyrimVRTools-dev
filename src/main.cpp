@@ -19,7 +19,7 @@ static SKSEMessagingInterface		* g_messagingInterface = NULL;
 //API
 static PapyrusVRAPI apiMessage;
 
-const unsigned int kPluginVersionNum = 22;
+const unsigned int kPluginVersionNum = 0x23;
 
 // Func prototype
 void OnSKSEMessageReceived(SKSEMessagingInterface::Message* message);
@@ -73,7 +73,7 @@ extern "C"
 			return false;
 		}
 
-		_MESSAGE("SkyrimVRTools v%d query passed", info->version);
+		_MESSAGE("SkyrimVRTools v%x query passed", info->version);
 
 		// ### do not do anything else in this callback
 		// ### only fill out PluginInfo and return true/false
@@ -140,6 +140,7 @@ extern "C"
 		return OpenVRHookMgr::GetInstance();
 	}
 
+	// Exported so DLL mods can check the version of the plugin more easily
 	unsigned int GetPluginVersion()
 	{
 		return kPluginVersionNum;
@@ -156,7 +157,7 @@ void OnSKSEMessageReceived(SKSEMessagingInterface::Message* message)
 {
 	if (message)
 	{
-		_MESSAGE("Received SKSE message %d", message->type);
+		//_MESSAGE("Received SKSE message %d", message->type);
 		if (message->type == SKSEMessagingInterface::kMessage_PostPostLoad)
 		{
 			if (g_messagingInterface && g_pluginHandle)
